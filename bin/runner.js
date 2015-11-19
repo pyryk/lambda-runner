@@ -1,9 +1,10 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = createRunner;
+var _objectAssign = require('object-assign');
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -13,29 +14,27 @@ var withStacktrace = function withStacktrace(errors) {
 	});
 };
 
-function createRunner(_ref) {
-	var _ref$name = _ref.name;
-	var name = _ref$name === undefined ? 'MockFunctionName' : _ref$name;
-	var _ref$memoryLimitInMB = _ref.memoryLimitInMB;
-	var memoryLimitInMB = _ref$memoryLimitInMB === undefined ? '128' : _ref$memoryLimitInMB;
-	var _ref$timeoutInSec = _ref.timeoutInSec;
-	var timeoutInSec = _ref$timeoutInSec === undefined ? 3 : _ref$timeoutInSec;
-	var _ref$invokeid = _ref.invokeid;
-	var invokeid = _ref$invokeid === undefined ? '' + Date.now() : _ref$invokeid;
-	var _ref$functionVersion = _ref.functionVersion;
-	var functionVersion = _ref$functionVersion === undefined ? '$LATEST' : _ref$functionVersion;
-	var _ref$invokedFunctionA = _ref.invokedFunctionArn;
-	var invokedFunctionArn = _ref$invokedFunctionA === undefined ? null : _ref$invokedFunctionA;
-	var _ref$logGroupName = _ref.logGroupName;
-	var logGroupName = _ref$logGroupName === undefined ? null : _ref$logGroupName;
-	var _ref$logStreamName = _ref.logStreamName;
-	var logStreamName = _ref$logStreamName === undefined ? 'mockLogStreamName' : _ref$logStreamName;
+function run(handler, event) {
+	var opts = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+	var defaults = {
+		name: 'MockFunctionName',
+		memoryLimitInMB: '128',
+		timeoutInSec: 3,
+		invokeid: '' + Date.now(),
+		functionVersion: '$LATEST',
+		invokedFunctionArn: null,
+		logGroupName: null,
+		logStreamName: 'mockLogStreamName'
+	};
+
+	opts = (0, _objectAssign2.default)({}, defaults, opts);
 
 	if (!invokedFunctionArn) {
 		invokedFunctionArn = 'arn:mock:lambda:abc:function:' + name;
 	}
 
-	if (logGroupName) {
+	if (!logGroupName) {
 		logGroupName = '/aws/lambda/' + name;
 	}
 
@@ -44,7 +43,7 @@ function createRunner(_ref) {
 		return start + timeoutInSec * 1000 - Date.now();
 	}
 
-	return {
+	var context = {
 		succeed: function succeed() {
 			var _console;
 
@@ -80,4 +79,10 @@ function createRunner(_ref) {
 		invokedFunctionArn: invokedFunctionArn,
 		getRemainingTimeInMillis: getRemainingTimeInMillis
 	};
+
+	handler(event, context);
 }
+
+module.exports = {
+	run: run
+};
