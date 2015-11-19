@@ -1,0 +1,26 @@
+{
+  "name": "lambda-runner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/runner.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "babel src --out-dir bin",
+    "start": "babel-node src/runner.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pyryk/lambda-runner.git"
+  },
+  "author": "Pyry Kröger <pyry.kroger@futurice.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pyryk/lambda-runner/issues"
+  },
+  "homepage": "https://github.com/pyryk/lambda-runner#readme",
+  "devDependencies": {
+    "babel-cli": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18"
+  }
+}
