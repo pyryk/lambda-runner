@@ -18,12 +18,12 @@ function run(handler, event, opts = {}) {
 
 	opts = assign({}, defaults, opts);
 
-	if (!invokedFunctionArn) {
-		invokedFunctionArn = `arn:mock:lambda:abc:function:${name}`;
+	if (!opts.invokedFunctionArn) {
+		opts.invokedFunctionArn = `arn:mock:lambda:abc:function:${name}`;
 	}
 
-	if (!logGroupName) {
-		logGroupName = `/aws/lambda/${name}`;
+	if (!opts.logGroupName) {
+		opts.logGroupName = `/aws/lambda/${name}`;
 	}
 
 	const start = Date.now();
@@ -32,7 +32,7 @@ function run(handler, event, opts = {}) {
 	}
 
 
-	const context = {
+	const context = assign({
 		succeed: function(...results) {
 			console.log(...['SUCCESS'].concat(results));
 		},
@@ -41,15 +41,11 @@ function run(handler, event, opts = {}) {
 		},
 		done: function(...results) {
 			console.log(...['DONE'].concat(results));
-		},
-		name,
-		memoryLimitInMB,
-		timeoutInSec,
-		invokeid,
-		functionVersion,
-		invokedFunctionArn,
-		getRemainingTimeInMillis
-	};
+		}
+	}, opts);
+
+	// timeoutInSec is not available in Lambda and only used in getRemainingTimeInMillis 
+	delete context.timeoutInSec;
 
 	handler(event, context);
 }

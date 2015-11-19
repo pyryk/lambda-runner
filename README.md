@@ -30,7 +30,7 @@ Create a runner with the following code:
         functionVersion: '$LATEST',
         invokedFunctionArn: 'arn:aws:etc:lambda:MyLambdaFunction',
         logGroupName: '/aws/lambda/MyLambdaFunction',
-        logStreamName = 'exampleLogStreamName'
-    });
+        logStreamName: 'exampleLogStreamName'
+    };
 
     Runner.run(myLambdaFunction.handler, {data: 'myData'}, opts);
