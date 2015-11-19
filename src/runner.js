@@ -32,7 +32,7 @@ function run(handler, event, opts = {}) {
 	}
 
 
-	return {
+	const context = {
 		succeed: function(...results) {
 			console.log(...['SUCCESS'].concat(results));
 		},
@@ -50,4 +50,10 @@ function run(handler, event, opts = {}) {
 		invokedFunctionArn,
 		getRemainingTimeInMillis
 	};
+
+	handler(event, context);
 }
+
+module.exports = {
+	run
+};
