@@ -1,18 +1,23 @@
-'use strict';
+import assign from 'object-assign';
 
 const withStacktrace = (errors) => 
 	errors.map(e => e.stack ? `${e.message}: ${e.stack}` : JSON.stringify(e, null, 4));
 
-export default function createRunner({
-	name = 'MockFunctionName',
-	memoryLimitInMB = '128',
-	timeoutInSec = 3,
-	invokeid = `${Date.now()}`,
-	functionVersion = '$LATEST',
-	invokedFunctionArn = null,
-	logGroupName = null,
-	logStreamName = 'mockLogStreamName'
-}) {
+function run(handler, event, opts = {}) {
+	
+	const defaults = {
+		name: 'MockFunctionName',
+		memoryLimitInMB: '128',
+		timeoutInSec: 3,
+		invokeid: `${Date.now()}`,
+		functionVersion: '$LATEST',
+		invokedFunctionArn: null,
+		logGroupName: null,
+		logStreamName: 'mockLogStreamName'
+	};
+
+	opts = assign({}, defaults, opts);
+
 	if (!invokedFunctionArn) {
 		invokedFunctionArn = `arn:mock:lambda:abc:function:${name}`;
 	}
