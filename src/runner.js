@@ -26,6 +26,7 @@ function run(handler, event, opts = {}) {
 		opts.logGroupName = `/aws/lambda/${name}`;
 	}
 
+	const timeoutInSec = opts.timeoutInSec;
 	const start = Date.now();
 	function getRemainingTimeInMillis() {
 		return start + timeoutInSec * 1000 - Date.now();
