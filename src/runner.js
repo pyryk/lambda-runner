@@ -1,5 +1,7 @@
 import assign from 'object-assign';
 
+const printableResults = (results) => results.map(res => JSON.stringify(res, null ,4))
+
 const withStacktrace = (errors) => 
 	errors.map(e => e.stack ? `${e.message}: ${e.stack}` : JSON.stringify(e, null, 4));
 
@@ -35,13 +37,13 @@ function run(handler, event, opts = {}) {
 
 	const context = assign({
 		succeed: function(...results) {
-			console.log(...['SUCCESS'].concat(results));
+			console.log(...['SUCCESS'].concat(printableResults(results)));
 		},
 		fail: function(...results) {
 			console.log(...['FAILURE'].concat(withStacktrace(results)));
 		},
 		done: function(...results) {
-			console.log(...['DONE'].concat(results));
+			console.log(...['DONE'].concat(printableResults(results)));
 		}
 	}, opts);
 
