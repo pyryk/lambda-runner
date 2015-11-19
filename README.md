@@ -34,3 +34,7 @@ Create a runner with the following code:
     };
 
     Runner.run(myLambdaFunction.handler, {data: 'myData'}, opts);
+
+## License
+
+MIT. See [LICENSE.md](LICENSE.md)
